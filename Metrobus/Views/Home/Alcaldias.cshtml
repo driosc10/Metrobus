@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Alcaldias";
+    var alcaldias = ViewBag.alcaldias;
+}
+<h1>@ViewData["Title"]</h1>
+
+<br />
+
+<div class="row">
+    <div class="col-2"></div>
+    <div class="col-8">
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nombre</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    @foreach (var item in alcaldias)
+                    {
+                        <tr>
+                            <th scope="row">@item.AlcaldiaID</th>
+                            <td>@item.Name</td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div class="col-2"></div>
+</div>

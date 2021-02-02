@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "Consulta de información";
+    var metrobuses = ViewBag.metrobuses;
+    var ErrorMessage = ViewBag.ErrorMessage;
+}
+<h1>@ViewData["Title"]</h1>
+
+<br />
+
+<h6>Consulta la información de las ubicaciones de las unidades del metrobus proporcionado por el gobierno de la CDMX.</h6>
+<br />
+
+<button type="button" class="btn btn-primary btnSearch" onclick="ConsultaDataMetrobusesCDMX();">Consultar</button>
+@if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <div id="divMessage" class="row">
+        @ErrorMessage
+    </div> 
+}
+
+<br />
+@if (metrobuses.Count > 0)
+{
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Latitud</th>
+                        <th scope="col">Longitud</th>
+                        <th scope="col">Fecha de Actualización</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        @foreach (var item in metrobuses)
+                        {
+                            <tr>
+                                <th scope="row">@item.Vehicle_ID</th>
+                                <td>@item.Latitud</td>
+                                <td>@item.Longitud</td>
+                                <td>@item.Date_Update</td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+        </div>
+        <div class="col-2"></div>
+    </div>
+}
+
+
