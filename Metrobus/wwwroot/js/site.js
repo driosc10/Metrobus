@@ -17,10 +17,23 @@ function ConsultaDataMetrobusesCDMX() {
         type: 'GET',
         async: true,
         success: function (response) {
-            alert("La información se consulto correctamente");
+        
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'La información se consulto correctamente',
+                showConfirmButton: false,
+                timer: 1500
+            })
         },
         error: function () {
-            alert("Error al consultar la información");
+            Swal.fire({
+                position: 'top-end',
+                icon: 'error',
+                title: 'Error al consultar la información',
+                showConfirmButton: false,
+                timer: 1500
+            })
         }
     });
 
