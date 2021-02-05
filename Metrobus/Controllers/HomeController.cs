@@ -17,6 +17,10 @@ namespace Metrobus.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        public static string urlMetrobusCDMX = @"https://datos.cdmx.gob.mx/api/3/action/datastore_search?resource_id=ad360a0e-b42f-482c-af12-1fd72140032e";
+        public static string urlMetrobusByID = @"http://localhost:8080/api/Metrobus/id?id=";
+        public static string urlMetrobus = @"http://localhost:8080/api/Metrobus";
+        public static string urlAlcaldias = @"http://localhost:8080/api/Alcaldias";
 
         public HomeController(
             ILogger<HomeController> logger)
@@ -38,10 +42,6 @@ namespace Metrobus.Controllers
             {
                 if (consulta > 0)
                 {
-                    var urlMetrobusCDMX = "https://datos.cdmx.gob.mx/api/3/action/datastore_search?resource_id=ad360a0e-b42f-482c-af12-1fd72140032e";
-                    var urlMetrobusByID = "http://localhost:8080/api/Metrobus/id?id=";
-                    var urlInserMetrobus = "http://localhost:8080/api/Metrobus";
-
                     using (var http = new HttpClient())
                     {
                         var responseCDMX = await http.GetStringAsync(urlMetrobusCDMX);
@@ -63,7 +63,7 @@ namespace Metrobus.Controllers
                                 metrobus.Longitud = item["position_longitude"];
                                 var json = JsonConvert.SerializeObject(metrobus);
                                 var metrobusNew = new StringContent(json, Encoding.UTF8, "application/json");
-                                var insertMetrobus = await http.PostAsync(urlInserMetrobus, metrobusNew);
+                                var insertMetrobus = await http.PostAsync(urlMetrobus, metrobusNew);
                                 
                             }
                         }
@@ -77,7 +77,6 @@ namespace Metrobus.Controllers
             }
             finally
             {
-                var urlMetrobus = "http://localhost:8080/api/Metrobus";
                 using (var http = new HttpClient())
                 {
                     var response = await http.GetStringAsync(urlMetrobus);
@@ -99,7 +98,7 @@ namespace Metrobus.Controllers
             string id = HttpContext.Session.GetString("VehicleID");
             if (!string.IsNullOrEmpty(id))
             {
-                var url = "http://localhost:8080/api/Metrobus/id?id=" + id.ToString();
+                var url = urlMetrobusByID + id.ToString();
 
                 using (var http = new HttpClient())
                 {
@@ -112,11 +111,10 @@ namespace Metrobus.Controllers
         public async Task<IActionResult> Alcaldias()
         {
             HttpContext.Session.Clear();
-            var url = "http://localhost:8080/api/Alcaldias";
-
+            
             using(var http =  new HttpClient())
             {
-                var response = await http.GetStringAsync(url);
+                var response = await http.GetStringAsync(urlAlcaldias);
                 var alcaldias = JsonConvert.DeserializeObject<List<AlcaldiasModel>>(response);
 
                 if(alcaldias.Count() == 0)
@@ -128,10 +126,10 @@ namespace Metrobus.Controllers
                     {
                         var json = JsonConvert.SerializeObject(alcadia);
                         var alcadiaNew = new StringContent(json, Encoding.UTF8, "application/json");
-                        var insertAlcadia = await http.PostAsync(url, alcadiaNew);
+                        var insertAlcadia = await http.PostAsync(urlAlcaldias, alcadiaNew);
                     }
 
-                    var response2 = await http.GetStringAsync(url);
+                    var response2 = await http.GetStringAsync(urlAlcaldias);
                     var alcaldias2 = JsonConvert.DeserializeObject<List<AlcaldiasModel>>(response);
                     ViewBag.alcaldias = alcaldias2;
                 }
